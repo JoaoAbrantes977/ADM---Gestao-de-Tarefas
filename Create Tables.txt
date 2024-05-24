@@ -1,0 +1,30 @@
+Nomes das base de dados:
+amd_user
+amd_task
+
+
+
+CREATE TABLE user
+(
+  id_user INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  createdOn DATE NOT NULL,
+  updatedOn DATE NOT NULL,
+  PRIMARY KEY (id_user)
+);
+
+CREATE TABLE task
+(
+  id INT NOT NULL AUTO_INCREMENT,
+  id_user INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  startDate VARCHAR(255) NOT NULL,
+  finishedDate VARCHAR(255) NOT NULL,
+  taskStatus INT NOT NULL,
+  createdOn DATE NOT NULL,
+  updatedOn DATE NOT NULL,
+  PRIMARY KEY (id)
+)
