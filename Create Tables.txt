@@ -1,6 +1,6 @@
 Nomes das base de dados:
-amd_user
-amd_task
+adm_user
+adm_task
 
 
 
