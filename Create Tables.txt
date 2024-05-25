@@ -2,7 +2,7 @@ Nomes das base de dados:
 adm_user
 adm_task
 
-
+############ Tabela User ############
 
 CREATE TABLE user
 (
@@ -15,16 +15,20 @@ CREATE TABLE user
   PRIMARY KEY (id_user)
 );
 
-CREATE TABLE task
-(
-  id INT NOT NULL AUTO_INCREMENT,
-  id_user INT NOT NULL,
-  title VARCHAR(255) NOT NULL,
-  description VARCHAR(255) NOT NULL,
-  startDate VARCHAR(255) NOT NULL,
-  finishedDate VARCHAR(255) NOT NULL,
-  taskStatus INT NOT NULL,
-  createdOn DATE NOT NULL,
-  updatedOn DATE NOT NULL,
-  PRIMARY KEY (id)
-)
+########### Tabela Task ###########
+
+CREATE DATABASE IF NOT EXISTS adm_task;
+
+USE adm_task;
+
+CREATE TABLE IF NOT EXISTS task (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    startDate DATE,
+    finishedDate DATE,
+    taskStatus ENUM('pending', 'completed') DEFAULT 'pending',
+    createdOn TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedOn TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
