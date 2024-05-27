@@ -3,9 +3,12 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
+const cors = require("cors")
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(cors({
+  origin: 'http://localhost:3000',
+}))
 // parse application/json
 app.use(bodyParser.json());
 

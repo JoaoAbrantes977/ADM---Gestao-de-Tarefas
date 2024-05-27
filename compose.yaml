@@ -2,7 +2,7 @@ services:
   mysql_user:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: adm_user
     restart: always
     ports:
@@ -18,7 +18,7 @@ services:
   mysql_task:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: adm_task
     restart: always
     ports:

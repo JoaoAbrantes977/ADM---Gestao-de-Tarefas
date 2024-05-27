@@ -39,6 +39,8 @@ INSERT INTO `task` (`id_user`, `title`, `description`, `status`, `createdAt`, `u
 ('3', 'Tarefa 3', 'Tarefa de microserviços 3', 1, '2024-05-26 14:48:47', '2024-05-26 14:48:47'),
 ('4', 'Tarefa 4', 'Tarefa de microserviços 4', 1, '2024-05-26 14:48:38', '2024-05-26 14:59:37');
 
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';
+FLUSH PRIVILEGES;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

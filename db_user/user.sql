@@ -35,7 +35,10 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`name`, `email`, `password`, `createdAt`, `updatedAt`) VALUES
 ('João', 'joao@mail.com', 'qwerty', '2024-05-26 12:39:50', '2024-05-26 12:39:50'),
 ('Henrique', 'hemrique@mail.com', 'qwerty', '2024-05-26 21:33:23', '2024-05-26 22:13:45'),
-('Xavier', 'xavier@mail.com', 'qwerty', '2024-05-26 12:41:00', '2024-05-26 12:41:00'),
+('Xavier', 'xavier@mail.com', 'qwerty', '2024-05-26 12:41:00', '2024-05-26 12:41:00');
+
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';
+FLUSH PRIVILEGES;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
