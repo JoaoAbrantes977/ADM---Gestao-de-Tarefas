@@ -15,20 +15,14 @@ const userRoute = require("./Routes/user");
 // Routes
 app.use('/user', userRoute);
 
-//CODE FOR CONNECTION TO DATABASE
+// CODE FOR CONNECTION TO DATABASE
 const db = mysql.createConnection({
-    host:"localhost",
-    port:"3306",
-    user:"root",
-    database:"adm_user",
-    });
-    
-    db.connect(function(err){
-    if(err)throw err;
-    
-    console.log("Database Connected!");
-    
-    });
+    host: "mysql_user",        // Change this to match the Docker service name
+    port: "3306",          // MySQL default port
+    user: "root",
+    password: "root",      // Add the password field if it is required
+    database: "adm_user"
+});
 
     //Global variable for the mysql connection
     global.db = db;

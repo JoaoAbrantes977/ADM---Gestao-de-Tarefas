@@ -1,15 +1,35 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');  
 const router = express.Router();
 
 // Generate JWT token for the registered user
 const secretKey = "twerwdsr";
 
+// Route to get all tasks
+router.get('/', (req, res) =>{
+
+  //variavel global database
+   const db = global.db;
+ // SQL query to retrieve all tasks
+ const query = ` SELECT * FROM user `;
+
+ // Execute the SQL query with the inspection ID as a parameter
+ db.query(query, (error, results, fields) => {
+   if (error) {
+     console.error('Error retrieving users:', error);
+     res.status(500).send("Error retrieving users");
+     return;
+   }
+   console.log('Users retrieved successfully');
+   res.status(200).json(results); 
+ });
+});
+
 // Route to handle user registration
 router.post('/register', (req, res) => {
 
-    //variavel global database
+    // Global variable database
     const db = global.db;
     const { name, password, email } = req.body;
     // Generate salt and hash password
@@ -52,7 +72,7 @@ router.post('/login', (req, res) => {
 
       const user = results[0];
 
-      //Compare hashed passwords
+      // Compare hashed passwords
       bcrypt.compare(password, user.password, (err, isMatch) => {
           if (err) {
               console.error(err);
@@ -90,7 +110,7 @@ function verifyToken(req, res, next) {
 // Protected Route Example
 router.get('/profile', verifyToken, (req, res) => {
 
-  //variavel global database
+  // Global variable database
   const db = global.db;
   const userId = req.userId;
   // Fetch user profile from database using userId
@@ -114,7 +134,7 @@ router.patch('/edit', verifyToken, (req, res) => {
   const { name, email } = req.body;
 
   // Update user information in the database
-  db.query('UPDATE utilizador SET name=?, email=?, updatedOn = CURDATE() WHERE id_user=?',
+  db.query('UPDATE user SET name=?, email=?, updatedOn = CURDATE() WHERE id_user=?',
       [name, email, userId],
       (err, result) => {
           if (err) {

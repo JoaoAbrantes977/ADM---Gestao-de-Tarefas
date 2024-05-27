@@ -49,13 +49,13 @@ router.post('/', (req, res) => {
 
     //variavel global database
     const db = global.db;
-    const { id_user, title, description, startDate, finishedDate, taskStatus} = req.body;
+    const { id_user, title, description, status,} = req.body;
 
         // Insert the user with the hashed password 
-        const sqlInsertTask = `INSERT INTO task (id_user, title, description, startDate, finishedDate, taskStatus, createdOn, updatedOn) 
-                               VALUES (?, ?, ?, ?, ?, ?, CURDATE(), CURDATE())`;
+        const sqlInsertTask = `INSERT INTO task (id_user, title, description, status, createdAt, updatedAt) 
+                               VALUES (?, ?, ?, ?, CURDATE(), CURDATE())`;
   
-        db.query(sqlInsertTask, [id_user, title, description, startDate, finishedDate, taskStatus], (err, result) => {
+        db.query(sqlInsertTask, [id_user, title, description, status], (err, result) => {
           if (err) {
             console.error(err);
             return res.status(500).json({ message: 'Error inserting task' });
@@ -67,7 +67,7 @@ router.post('/', (req, res) => {
 // Route to edit a task by it's id
 router.patch('/:id', (req, res) =>{
 
-    
+
 });
 
 // Route to delete a task by it's id

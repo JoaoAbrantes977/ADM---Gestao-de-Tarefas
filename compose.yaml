@@ -1,0 +1,92 @@
+services:
+  mysql_user:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: adm_user
+    restart: always
+    ports:
+      - "3306:3306"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: "0.3GB"
+    volumes:
+      - ./db_user:/docker-entrypoint-initdb.d
+
+  mysql_task:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: adm_task
+    restart: always
+    ports:
+      - "3307:3306"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: "0.3GB"
+    volumes:
+      - ./db_task:/docker-entrypoint-initdb.d
+
+  container_user:
+    build: ./servicoUser
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      PORT: 3000
+      DB_HOST: mysql_user
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: adm_user
+    depends_on:
+      - mysql_user
+    volumes:
+      - ./servicoUser:/app
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "0.5GB"
+
+  container_task:
+    build: ./servicoTask
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    environment:
+      PORT: 3000
+      DB_HOST: mysql_task
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: adm_task
+    depends_on:
+      - mysql_task
+    volumes:
+      - ./servicoTask:/app
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "0.5GB"
+          
+  orchestrator:
+    build: ./servicoOrquestrador
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000 
+    depends_on:
+      - container_user
+      - container_task
+    volumes:
+      - ./servicoOrquestrador:/app
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "0.5GB"
