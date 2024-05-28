@@ -6,7 +6,7 @@ const router = express.Router();
 // Generate JWT token for the registered user
 const secretKey = "twerwdsr";
 
-// Route to get all tasks
+// Route to get all users
 router.get('/', (req, res) =>{
 
   //variavel global database
@@ -26,6 +26,28 @@ router.get('/', (req, res) =>{
  });
 });
 
+// Route to get a user by it's id
+router.get('/:id', (req, res) =>{
+
+  //variavel global database
+const db = global.db;
+const userId = req.params.id;
+
+// SQL query to retrieve user information by it's id
+const query = ` SELECT * FROM user where id = ? `;
+
+// Execute the SQL query with the inspection ID as a parameter
+db.query(query, [userId], (error, results, fields) => {
+ if (error) {
+   console.error('Error retrieving task:', error);
+   res.status(500).send("Error retrieving task");
+   return;
+ }
+ console.log('Task retrieved successfully');
+ res.status(200).json(results); 
+});
+});
+
 // Route to handle user registration
 router.post('/register', (req, res) => {
 
@@ -40,7 +62,7 @@ router.post('/register', (req, res) => {
       }
   
         // Insert the user with the hashed password 
-        const sqlInsertUser = `INSERT INTO user (name, password, email, createdOn, updatedOn) 
+        const sqlInsertUser = `INSERT INTO user (name, password, email, createdAt, updatedAt) 
                                VALUES (?, ?, ?, CURDATE(), CURDATE())`;
   
         db.query(sqlInsertUser, [name, hashedPassword, email], (err, result) => {
@@ -114,7 +136,7 @@ router.get('/profile', verifyToken, (req, res) => {
   const db = global.db;
   const userId = req.userId;
   // Fetch user profile from database using userId
-  db.query('SELECT * FROM user WHERE id_user = ?', userId, (err, results) => {
+  db.query('SELECT * FROM user WHERE id = ?', userId, (err, results) => {
     if (err) {
       console.error(err);
       res.status(500).json({ message: 'Error fetching profile' });

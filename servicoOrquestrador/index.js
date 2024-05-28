@@ -11,7 +11,7 @@ const port = 3000;
 
 //#############   USERS    ###############//
 
-// Proxy for the user service
+// Get all users
 app.use('/user', async (req, res) => {
     const resp = await fetch("http://container_user:3000/user")
 
@@ -24,6 +24,70 @@ app.use('/user', async (req, res) => {
     res.json(data)
 });
 
+// Get user by id (GET)
+app.use('/userId/:id', async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const resp = await fetch(`http://container_user:3000/user/${userId}`);
+        const data = await resp.json();
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching user by id:', error);
+        res.status(500).send("Error fetching user by id");
+    }
+});
+
+// Register a user (POST)
+app.use('/userInsert', async (req, res) => {
+    try {
+        const userData = req.body;
+        
+        const response = await fetch('http://container_user:3000/user/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Error: ${response.status} - ${errorData.message}`);
+        }
+
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).send("Error user task");
+    }
+});
+
+// Register a user (POST)
+app.use('/userLogin', async (req, res) => {
+    try {
+        const userData = req.body;
+        
+        const response = await fetch('http://container_user:3000/user/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Error: ${response.status} - ${errorData.message}`);
+        }
+
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).send("Error user task");
+    }
+});
 
 //#############   TASKS    ###############//
 
