@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: container-task-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: container-task
+  template:
+    metadata:
+      labels:
+        app: container-task
+    spec:
+      containers:
+        - name: container-task
+          image: microservicos_docker-container_task
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+            - name: DB_HOST
+              value: mysql-task-service
+            - name: DB_USER
+              value: root
+            - name: DB_PASSWORD
+              value: root
+            - name: DB_NAME
+              value: adm_task
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "500Mi"
+          volumeMounts:
+            - name: container-task-volume
+              mountPath: /app
+      volumes:
+        - name: container-task-volume
+          hostPath:
+            path: /D:/microservicos_docker/servicoTask
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: container-task-service
+spec:
+  type: ClusterIP
+  selector:
+    app: container-task
+  ports:
+    - protocol: TCP
+      port: 3002
+      targetPort: 3000

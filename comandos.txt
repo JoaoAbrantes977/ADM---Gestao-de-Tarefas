@@ -4,11 +4,6 @@
 FLUSH PRIVILEGES;
 
 
-- Integrar com Kubernetes
-- No user falta fazer a rota de edit e delete, tenho de passar o token pelo fetch
-- fazer o user interface
-
-
 Para criar a imagens:
 
 docker build -t mysql_task:latest .  --> cd db_task
@@ -16,13 +11,32 @@ docker build -t mysql_user:latest .  --> cd db_user
 
 Para passar as imagens para um containers:
 docker run -d --name my-container my-image
+*******************************************************************
+
+docker-compose up --build  
+docker logs 
+docker compose up -d
+docker build -t joaoabrantes97/node-orquestrador:latest . ---> constroe imagem a partir do Dockerfile 
+docker push joaoabrantes97/node-orquestrador:latest  ---> puxar a imagem para o repositorio Docker Hub
 
 
+Minikube:
+
+-minikube start
+
+-kubectl delete  -f ./k8s
+
+-kubectl apply  -f ./k8s
+
+-kubectl get pods 
+
+-kubectl get services
+
+-minikube dashboard
+
+-minikube service --all
 
 
-Start minikube:
-
-minikube start
 
 Transfer the Docker Image to Minikube:
 

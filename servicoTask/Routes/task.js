@@ -10,7 +10,7 @@ router.get('/', (req, res) =>{
  // SQL query to retrieve all tasks
  const query = ` SELECT * FROM task `;
 
- // Execute the SQL query with the inspection ID as a parameter
+ // Execute the SQL query 
  db.query(query, (error, results, fields) => {
    if (error) {
      console.error('Error retrieving task:', error);

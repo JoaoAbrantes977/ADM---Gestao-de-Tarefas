@@ -63,7 +63,7 @@ app.use('/userInsert', async (req, res) => {
     }
 });
 
-// Register a user (POST)
+// login (POST)
 app.use('/userLogin', async (req, res) => {
     try {
         const userData = req.body;
@@ -86,6 +86,62 @@ app.use('/userLogin', async (req, res) => {
     } catch (error) {
         console.error('Error creating user:', error);
         res.status(500).send("Error user task");
+    }
+});
+
+// Edit a user by it's id (PATCH)
+app.use('/userEdit/:id', async (req, res) =>{
+
+    const userId = req.params.id;
+
+    try {
+        const userData = req.body;
+        
+        const response = await fetch(`http://container_user:3000/user/${userId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Error: ${response.status} - ${errorData.message}`);
+        }
+
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).send("Error updating user");
+    }
+});
+
+//Deleting a user by it's id (DELETE)
+app.use('/userDelete/:id', async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const response = await fetch(`http://container_user:3000/user/${userId}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            let errorData;
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                errorData = await response.json();
+            } else {
+                errorData = { message: response.statusText };
+            }
+            throw new Error(`Error: ${response.status} - ${errorData.message}`);
+        }
+
+        res.status(200).send({ message: `User with ID ${userId} deleted successfully.` });
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).send(`Error deleting user: ${error.message}`);
     }
 });
 

@@ -168,5 +168,33 @@ router.patch('/edit', verifyToken, (req, res) => {
   );
 });
 
+// Route to delete a user by its ID
+router.delete('/:id', (req, res) => {
+
+  //variavel global database
+  const db = global.db;
+  const userId = req.params.id;
+
+  // Check if taskId is a valid integer
+  if (isNaN(userId)) {
+    return res.status(400).json({ error: 'Invalid user ID' });
+  }
+
+  // Delete task from the database
+  const sql = 'DELETE FROM user WHERE id = ?';
+  db.query(sql, [userId], (error, results, fields) => {
+    if (error) {
+      console.error('Error deleting user:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    // Check if any rows were affected (User with given ID exists)
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    // Task deleted successfully
+    res.status(200).json({ message: 'User deleted successfully' });
+  });
+});
+
 // Exports the routes to server.js
 module.exports = router;

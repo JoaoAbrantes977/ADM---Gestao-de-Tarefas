@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orchestrator-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orchestrator
+  template:
+    metadata:
+      labels:
+        app: orchestrator
+    spec:
+      containers:
+        - name: orchestrator-container
+          image: microservicos_docker-orchestrator
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "500Mi"
+          volumeMounts:
+            - name: orchestrator-volume
+              mountPath: /app
+      volumes:
+        - name: orchestrator-volume
+          hostPath:
+            path: /D:/microservicos_docker/servicoOrquestrador
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orchestrator-service
+spec:
+  type: ClusterIP
+  selector:
+    app: orchestrator
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000

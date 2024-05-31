@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-task-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-task
+  template:
+    metadata:
+      labels:
+        app: mysql-task
+    spec:
+      containers:
+        - name: mysql-task-container
+          image: mysql:8.0
+          env:
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "yes"
+            - name: MYSQL_DATABASE
+              value: adm_task
+          ports:
+            - containerPort: 3306
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "300Mi"
+          volumeMounts:
+            - name: mysql-task-volume
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mysql-task-volume
+          hostPath:
+            path: /D:/microservicos_docker/db_task
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-task-service
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql-task
+  ports:
+    - protocol: TCP
+      port: 3307
+      targetPort: 3306

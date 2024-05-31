@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-user-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-user
+  template:
+    metadata:
+      labels:
+        app: mysql-user
+    spec:
+      containers:
+        - name: mysql-user-container
+          image: mysql:8.0
+          env:
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "yes"
+            - name: MYSQL_DATABASE
+              value: "adm_user"
+          ports:
+            - containerPort: 3306
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "300Mi"
+          volumeMounts:
+            - name: mysql-user-volume
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mysql-user-volume
+          hostPath:
+            path: /D:/microservicos_docker/db_user
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-user-service
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql-user
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
