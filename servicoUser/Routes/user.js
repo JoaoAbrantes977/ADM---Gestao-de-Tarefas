@@ -124,7 +124,7 @@ function verifyToken(req, res, next) {
     if (err) {
       return res.status(401).json({ message: 'Failed to authenticate token' });
     }
-    req.userId = decoded.id;
+    req.id = decoded.id;
     next();
   });
 }
@@ -148,15 +148,15 @@ router.get('/profile', verifyToken, (req, res) => {
 });
 
 // Edits the User
-router.patch('/edit', verifyToken, (req, res) => {
-  // Extract user ID from the JWT token
-  const userId = req.userId;
+router.patch('/edit/:id', verifyToken, (req, res) => {
+  
+  const userId = req.params.id;
 
   // Extract updated user information from the request body
   const { name, email } = req.body;
 
   // Update user information in the database
-  db.query('UPDATE user SET name=?, email=?, updatedOn = CURDATE() WHERE id_user=?',
+  db.query('UPDATE user SET name=?, email=?, updatedAt = CURRENT_TIMESTAMP WHERE id=?',
       [name, email, userId],
       (err, result) => {
           if (err) {

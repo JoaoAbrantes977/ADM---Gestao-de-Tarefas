@@ -19,7 +19,7 @@ app.use('/user', async (req, res) => {
 
     const data = await resp.json()
 
-    console.log(11111, data)
+    console.log(data)
 
     res.json(data)
 });
@@ -85,22 +85,23 @@ app.use('/userLogin', async (req, res) => {
         res.json(data);
     } catch (error) {
         console.error('Error creating user:', error);
-        res.status(500).send("Error user task");
+        res.status(500).send("Error user");
     }
 });
 
 // Edit a user by it's id (PATCH)
-app.use('/userEdit/:id', async (req, res) =>{
-
+app.use('/userEdit/:id', async (req, res) => {
     const userId = req.params.id;
+    const token = req.headers['authorization']; 
 
     try {
         const userData = req.body;
         
-        const response = await fetch(`http://container_user:3000/user/${userId}`, {
+        const response = await fetch(`http://container_user:3000/user/edit/${userId}`, {
             method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': token 
             },
             body: JSON.stringify(userData)
         });

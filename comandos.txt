@@ -13,9 +13,11 @@ Para passar as imagens para um containers:
 docker run -d --name my-container my-image
 *******************************************************************
 
-docker-compose up --build  
-docker logs 
-docker compose up -d
+docker-compose up --build -> para montar a partir das imagens 
+docker-compose up -> para reiniciar
+docker ps -> ver os containers
+docker logs <id_do_container>
+docker compose up -d -> detached mode
 docker build -t joaoabrantes97/node-orquestrador:latest . ---> constroe imagem a partir do Dockerfile 
 docker push joaoabrantes97/node-orquestrador:latest  ---> puxar a imagem para o repositorio Docker Hub
 
